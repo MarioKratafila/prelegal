@@ -95,5 +95,5 @@ secrets/
 .docker/
 
 # Alembic
-# (keep alembic/versions/ tracked — uncomment if you auto-generate them)
+# (keep alembic/versions/ tracked -- uncomment if you auto-generate them)
 # alembic/versions/
