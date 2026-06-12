@@ -4,7 +4,6 @@ import { useState } from "react";
 import NdaForm from "@/components/NdaForm";
 import NdaPreview from "@/components/NdaPreview";
 import { NdaFormData } from "@/lib/types";
-import { generateNdaMarkdown } from "@/lib/generateNda";
 
 const today = new Date().toISOString().split("T")[0];
 
@@ -25,16 +24,28 @@ const defaultFormData: NdaFormData = {
 
 export default function Home() {
   const [formData, setFormData] = useState<NdaFormData>(defaultFormData);
+  const [downloading, setDownloading] = useState(false);
 
-  function handleDownload() {
-    const markdown = generateNdaMarkdown(formData);
-    const blob = new Blob([markdown], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Mutual-NDA.md";
-    a.click();
-    URL.revokeObjectURL(url);
+  async function handleDownload() {
+    const element = document.getElementById("nda-preview");
+    if (!element) return;
+    setDownloading(true);
+    try {
+      const { default: html2canvas } = await import("html2canvas");
+      const { default: jsPDF } = await import("jspdf");
+
+      const canvas = await html2canvas(element, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("Mutual-NDA.pdf");
+    } finally {
+      setDownloading(false);
+    }
   }
 
   return (
@@ -46,9 +57,10 @@ export default function Home() {
         </div>
         <button
           onClick={handleDownload}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
+          disabled={downloading}
+          className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
         >
-          Download NDA
+          {downloading ? "Generating PDF…" : "Download PDF"}
         </button>
       </header>
 

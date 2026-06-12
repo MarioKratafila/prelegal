@@ -22,7 +22,7 @@ export default function NdaPreview({ data }: Props) {
       : "In perpetuity.";
 
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-sm rounded-lg p-10 text-sm leading-relaxed text-gray-800">
+    <div id="nda-preview" className="max-w-3xl mx-auto bg-white shadow-sm rounded-lg p-10 text-sm leading-relaxed text-gray-800">
       <h1 className="text-2xl font-bold text-center mb-2">Mutual Non-Disclosure Agreement</h1>
       <p className="text-xs text-gray-500 text-center mb-8">
         Common Paper Standard Terms Version 1.0
@@ -79,12 +79,14 @@ export default function NdaPreview({ data }: Props) {
               <td className="border border-gray-300 px-3 py-4"></td>
               <td className="border border-gray-300 px-3 py-4"></td>
             </tr>
-            {([
-              ["Print Name", data.party1.printName, data.party2.printName],
-              ["Title", data.party1.title, data.party2.title],
-              ["Company", data.party1.company, data.party2.company],
-              ["Notice Address", data.party1.noticeAddress, data.party2.noticeAddress],
-            ] as [string, string, string][]).map(([label, v1, v2]) => (
+            {(
+              [
+                ["Print Name", data.party1.printName, data.party2.printName],
+                ["Title", data.party1.title, data.party2.title],
+                ["Company", data.party1.company, data.party2.company],
+                ["Notice Address", data.party1.noticeAddress, data.party2.noticeAddress],
+              ] as [string, string, string][]
+            ).map(([label, v1, v2]) => (
               <tr key={label}>
                 <td className="border border-gray-300 px-3 py-2 font-medium text-gray-600">{label}</td>
                 <td className="border border-gray-300 px-3 py-2 text-center">
@@ -110,15 +112,15 @@ export default function NdaPreview({ data }: Props) {
 
       <div className="space-y-3 text-xs leading-relaxed">
         <p>
-          <strong>1. Introduction.</strong> This MNDA allows each party (&ldquo;Disclosing Party&rdquo;) to disclose information
-          in connection with the <em><Field value={data.purpose} placeholder="[Purpose]" /></em>. Confidential
-          Information includes technical or business information, product designs, pricing, security documentation,
-          and know-how.
+          <strong>1. Introduction.</strong> This MNDA allows each party (&ldquo;Disclosing Party&rdquo;) to disclose
+          information in connection with the <em><Field value={data.purpose} placeholder="[Purpose]" /></em>.
+          Confidential Information includes technical or business information, product designs, pricing,
+          security documentation, and know-how.
         </p>
         <p>
-          <strong>2. Use and Protection.</strong> The Receiving Party shall use Confidential Information solely
-          for the <em><Field value={data.purpose} placeholder="[Purpose]" /></em> and protect it with at least a
-          reasonable standard of care.
+          <strong>2. Use and Protection.</strong> The Receiving Party shall use Confidential Information
+          solely for the <em><Field value={data.purpose} placeholder="[Purpose]" /></em> and protect it
+          with at least a reasonable standard of care.
         </p>
         <p>
           <strong>3. Exceptions.</strong> Obligations do not apply to information that is publicly available,
@@ -138,8 +140,8 @@ export default function NdaPreview({ data }: Props) {
           and destroy or return all Confidential Information.
         </p>
         <p>
-          <strong>7. Proprietary Rights.</strong> The Disclosing Party retains all intellectual property rights.
-          Disclosure grants no license.
+          <strong>7. Proprietary Rights.</strong> The Disclosing Party retains all intellectual property
+          rights. Disclosure grants no license.
         </p>
         <p>
           <strong>8. Disclaimer.</strong> ALL CONFIDENTIAL INFORMATION IS PROVIDED &ldquo;AS IS&rdquo;, WITHOUT WARRANTIES
