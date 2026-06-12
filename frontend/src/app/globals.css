@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media print {
+  header,
+  aside {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+  #nda-preview {
+    box-shadow: none !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  body {
+    background: white !important;
+  }
+}
