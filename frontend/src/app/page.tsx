@@ -24,29 +24,6 @@ const defaultFormData: NdaFormData = {
 
 export default function Home() {
   const [formData, setFormData] = useState<NdaFormData>(defaultFormData);
-  const [downloading, setDownloading] = useState(false);
-
-  async function handleDownload() {
-    const element = document.getElementById("nda-preview");
-    if (!element) return;
-    setDownloading(true);
-    try {
-      const { default: html2canvas } = await import("html2canvas");
-      const { default: jsPDF } = await import("jspdf");
-
-      const canvas = await html2canvas(element, { scale: 2 });
-      const imgData = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("Mutual-NDA.pdf");
-    } finally {
-      setDownloading(false);
-    }
-  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -56,11 +33,10 @@ export default function Home() {
           <h1 className="text-lg font-semibold text-gray-900 leading-tight">Mutual NDA Creator</h1>
         </div>
         <button
-          onClick={handleDownload}
-          disabled={downloading}
-          className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
+          onClick={() => window.print()}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
         >
-          {downloading ? "Generating PDF…" : "Download PDF"}
+          Download PDF
         </button>
       </header>
 
