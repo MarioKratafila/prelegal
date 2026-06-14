@@ -98,6 +98,15 @@ export interface ChatResponse {
   fields: DocumentFieldsResponse;
 }
 
+export interface DocumentResponse {
+  id: number;
+  doc_type: string;
+  title: string;
+  fields: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
 export const api = {
   signup: (email: string, password: string) =>
     request<TokenResponse>("/api/auth/signup", {
@@ -118,4 +127,15 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ messages, doc_type: docType }),
     }),
+
+  listDocuments: () => request<DocumentResponse[]>("/api/documents"),
+
+  saveDocument: (doc_type: string, fields: Record<string, unknown>) =>
+    request<DocumentResponse>("/api/documents", {
+      method: "POST",
+      body: JSON.stringify({ doc_type, fields }),
+    }),
+
+  deleteDocument: (id: number) =>
+    request<void>(`/api/documents/${id}`, { method: "DELETE" }),
 };

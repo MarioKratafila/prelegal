@@ -4,8 +4,13 @@
 
 @media print {
   header,
-  aside {
+  aside,
+  .no-print {
     display: none !important;
+  }
+  .print-content-container {
+    height: auto !important;
+    overflow: visible !important;
   }
   main {
     padding: 0 !important;

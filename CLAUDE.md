@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The catalog contains 12 document types. The V1 foundation is live with user authentication. AI chat for all 12 document types is implemented. Document generation is not yet implemented.
+The catalog contains 12 document types. The V1 foundation is live with user authentication. AI chat for all 12 document types is implemented. Document history (save/load/delete drafts) is implemented. Document generation (PDF output) is not yet implemented.
 
 ## Development process
 
@@ -29,7 +29,7 @@ There is an OPENROUTER_API_KEY in the .env file in the project root.
 The entire project should be packaged into a Docker container.  
 The backend should be in backend/ and be a uv project, using FastAPI.  
 The frontend should be in frontend/  
-The database uses SQLite (aiosqlite + SQLAlchemy async), created fresh on container startup, with a `users` table for sign up and sign in.  
+The database uses SQLite (aiosqlite + SQLAlchemy async), created fresh on container startup, with a `users` table for auth and a `documents` table for saving draft documents per user.  
 The frontend is statically exported (`next export`) and served by FastAPI via `StaticFiles`.  
 There should be scripts in scripts/ for:  
 ```bash
@@ -70,6 +70,15 @@ Backend available at http://localhost:8000
 - **`GenericDocumentPreview` component**: New `frontend/src/components/GenericDocumentPreview.tsx`; displays collected fields as a formatted key-value list with human-readable labels; shows party1/party2 sections when populated
 - **Updated API client**: `DocumentFieldsResponse` type covers all 12 document types; `api.chat()` accepts optional `docType` parameter
 - **Tests**: 6 backend unit tests in `backend/tests/test_chat.py` covering generic prompt selection, NDA field extraction, CSA field extraction, unauthenticated access, generic vs. doc-specific system prompt routing
+
+## What's implemented (as of PL-10)
+
+- **Document history backend**: `Document` model added to `backend/models.py` (fields: `id`, `user_id` FK, `doc_type`, `title`, `fields_json`, `created_at`, `updated_at`); new router `backend/routes/documents.py` with `GET /api/documents`, `POST /api/documents`, `GET /api/documents/{id}`, `DELETE /api/documents/{id}` — all auth-protected and scoped to the requesting user
+- **Document history frontend**: `DocumentHistory.tsx` sidebar (220px) shows saved drafts with relative timestamps, active highlight, and delete button; integrated into `page.tsx` to the left of the chat panel; "Save draft" button in the header saves current `doc_type` + `formData`; loading a history item remounts ChatPanel (via `key` prop) to reset chat state
+- **Draft disclaimer**: Yellow banner at the bottom of the document preview area: "Draft only. This document is a draft for review purposes only. It is not legal advice and must be reviewed by a qualified attorney before use."
+- **UI polish**: Login/signup pages updated with "Prelegal" brand dot + wordmark and improved taglines; header refined with tighter spacing and Save Draft button; history sidebar uses brand blue for active selection indicator
+- **API client**: `DocumentResponse` type and `api.listDocuments()`, `api.saveDocument()`, `api.deleteDocument()` added to `frontend/src/lib/api.ts`
+- **Tests**: 6 backend tests in `backend/tests/test_documents.py` covering empty list, save+list, get-by-id, delete, unauthenticated access (401), and cross-user access isolation (404)
 
 ## Color Scheme
 - Accent Yellow: `#ecad0a`
