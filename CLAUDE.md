@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The current implementation supports all 11 document types via AI chat with full user authentication and document persistence.
+The catalog contains 12 document types. The V1 foundation is live with user authentication. AI chat and document generation are not yet implemented.
 
 ## Development process
 
@@ -29,8 +29,8 @@ There is an OPENROUTER_API_KEY in the .env file in the project root.
 The entire project should be packaged into a Docker container.  
 The backend should be in backend/ and be a uv project, using FastAPI.  
 The frontend should be in frontend/  
-The database should use SQLLite and be created from scratch each time the Docker container is brought up, allowing for a users table with sign up and sign in.  
-Consider statically building the frontend and serving it via FastAPI, if that will work.  
+The database uses SQLite (aiosqlite + SQLAlchemy async), created fresh on container startup, with a `users` table for sign up and sign in.  
+The frontend is statically exported (`next export`) and served by FastAPI via `StaticFiles`.  
 There should be scripts in scripts/ for:  
 ```bash
 # Mac
@@ -46,6 +46,13 @@ scripts/start-windows.ps1
 scripts/stop-windows.ps1
 ```
 Backend available at http://localhost:8000
+
+## What's implemented (as of PL-7)
+
+- **Backend**: FastAPI uv project (`backend/`), async SQLAlchemy + aiosqlite SQLite DB, JWT auth (python-jose + passlib/bcrypt), endpoints: `POST /api/auth/signup`, `POST /api/auth/login`, `GET /api/auth/me`
+- **Frontend**: Next.js static export served by FastAPI; React AuthContext with localStorage JWT; login (`/login/`) and signup (`/signup/`) pages; home page redirects unauthenticated users to login
+- **Infrastructure**: Multi-stage Dockerfile (node:20-slim builds frontend, python:3.12-slim runs backend), start/stop scripts for Mac/Linux/Windows
+- **Tests**: 6 backend unit tests in `backend/tests/` covering signup, duplicate email, login, wrong password, me endpoint, unauthenticated access
 
 ## Color Scheme
 - Accent Yellow: `#ecad0a`
