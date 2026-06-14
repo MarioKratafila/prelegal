@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The catalog contains 12 document types. The V1 foundation is live with user authentication. AI chat for the Mutual NDA is implemented. Document generation is not yet implemented.
+The catalog contains 12 document types. The V1 foundation is live with user authentication. AI chat for all 12 document types is implemented. Document generation is not yet implemented.
 
 ## Development process
 
@@ -60,6 +60,16 @@ Backend available at http://localhost:8000
 - **AI Chat frontend**: `frontend/src/components/ChatPanel.tsx` — bubble-layout chat UI with auto-scroll, loading state, and field merge logic; replaces the old `NdaForm` on the home page
 - **API client**: `ChatMessage`, `NdaFieldsResponse`, `ChatResponse` types and `api.chat()` method added to `frontend/src/lib/api.ts`
 - **Tests**: 4 backend unit tests in `backend/tests/test_chat.py` covering happy path, field extraction, unauthenticated access, and empty message list
+
+## What's implemented (as of PL-9)
+
+- **Multi-document chat backend**: `POST /api/chat` now accepts `doc_type: str | None` in the request; a `CATALOG` registry maps each of the 12 document filenames to a tailored system prompt; a generic system prompt is used when no `doc_type` is provided, prompting the AI to help the user choose from all supported types and gracefully declining unsupported document requests
+- **Unified `DocumentFields` model**: Single Pydantic model in `backend/routes/chat.py` with all fields across all 12 document types (all optional); `ChatResponse` now includes `doc_type: str | None`
+- **Generic chat frontend**: `ChatPanel.tsx` updated to accept `docType` / `onDocTypeChange` props; sends `doc_type` with each request; generic field-merge loop handles any document type; initial greeting message is now document-type-agnostic
+- **Multi-document preview**: `page.tsx` tracks `docType` state and updates the header title dynamically; renders `NdaPreview` for Mutual NDA types, `GenericDocumentPreview` for all other document types
+- **`GenericDocumentPreview` component**: New `frontend/src/components/GenericDocumentPreview.tsx`; displays collected fields as a formatted key-value list with human-readable labels; shows party1/party2 sections when populated
+- **Updated API client**: `DocumentFieldsResponse` type covers all 12 document types; `api.chat()` accepts optional `docType` parameter
+- **Tests**: 6 backend unit tests in `backend/tests/test_chat.py` covering generic prompt selection, NDA field extraction, CSA field extraction, unauthenticated access, generic vs. doc-specific system prompt routing
 
 ## Color Scheme
 - Accent Yellow: `#ecad0a`

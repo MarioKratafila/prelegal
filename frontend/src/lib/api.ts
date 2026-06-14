@@ -32,30 +32,70 @@ export interface ChatMessage {
   content: string;
 }
 
-interface PartyFieldsPartial {
+export interface PartyFieldsPartial {
   printName: string | null;
   title: string | null;
   company: string | null;
   noticeAddress: string | null;
 }
 
-export interface NdaFieldsResponse {
-  purpose: string | null;
+export interface DocumentFieldsResponse {
+  // Common
   effectiveDate: string | null;
+  governingLaw: string | null;
+  jurisdiction: string | null;
+  party1: PartyFieldsPartial | null;
+  party2: PartyFieldsPartial | null;
+  // NDA
+  purpose: string | null;
   mndaTermType: "expires" | "until-terminated" | null;
   mndaTermYears: number | null;
   confidentialityTermType: "years" | "perpetuity" | null;
   confidentialityTermYears: number | null;
-  governingLaw: string | null;
-  jurisdiction: string | null;
   modifications: string | null;
-  party1: PartyFieldsPartial | null;
-  party2: PartyFieldsPartial | null;
+  // CSA / commercial
+  cloudServiceName: string | null;
+  subscriptionPeriodMonths: number | null;
+  fees: string | null;
+  paymentProcess: string | null;
+  termMonths: number | null;
+  // SLA
+  uptimePercentage: string | null;
+  responseTimeCriticalHours: string | null;
+  responseTimeHighHours: string | null;
+  responseTimeMediumHours: string | null;
+  serviceCreditPercentage: string | null;
+  // PSA
+  servicesDescription: string | null;
+  deliverables: string | null;
+  // DPA / BAA
+  dataTypes: string | null;
+  processingPurpose: string | null;
+  phiTypes: string | null;
+  // Software
+  softwareName: string | null;
+  licenseType: string | null;
+  // Partnership
+  partnershipPurpose: string | null;
+  revenueSharePercent: string | null;
+  // Pilot
+  pilotScope: string | null;
+  pilotDurationDays: number | null;
+  successCriteria: string | null;
+  // Design Partner
+  programDescription: string | null;
+  // AI Addendum
+  aiServiceDescription: string | null;
+  inputOutputOwnership: string | null;
 }
+
+// Backward-compat alias
+export type NdaFieldsResponse = DocumentFieldsResponse;
 
 export interface ChatResponse {
   message: string;
-  fields: NdaFieldsResponse;
+  doc_type: string | null;
+  fields: DocumentFieldsResponse;
 }
 
 export const api = {
@@ -73,9 +113,9 @@ export const api = {
 
   me: () => request<UserResponse>("/api/auth/me"),
 
-  chat: (messages: ChatMessage[]) =>
+  chat: (messages: ChatMessage[], docType: string | null = null) =>
     request<ChatResponse>("/api/chat", {
       method: "POST",
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({ messages, doc_type: docType }),
     }),
 };

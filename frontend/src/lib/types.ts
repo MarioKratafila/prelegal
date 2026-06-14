@@ -18,3 +18,6 @@ export interface NdaFormData {
   party1: Party;
   party2: Party;
 }
+
+// Generic document form data — keys map to any field from DocumentFieldsResponse
+export type DocumentFormData = Record<string, string | number | Party | null>;
