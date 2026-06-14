@@ -8,7 +8,7 @@ The available documents are covered in the catalog.json file in the project root
 
 @catalog.json
 
-The catalog contains 12 document types. The V1 foundation is live with user authentication. AI chat and document generation are not yet implemented.
+The catalog contains 12 document types. The V1 foundation is live with user authentication. AI chat for the Mutual NDA is implemented. Document generation is not yet implemented.
 
 ## Development process
 
@@ -53,6 +53,13 @@ Backend available at http://localhost:8000
 - **Frontend**: Next.js static export served by FastAPI; React AuthContext with localStorage JWT; login (`/login/`) and signup (`/signup/`) pages; home page redirects unauthenticated users to login
 - **Infrastructure**: Multi-stage Dockerfile (node:20-slim builds frontend, python:3.12-slim runs backend), start/stop scripts for Mac/Linux/Windows
 - **Tests**: 6 backend unit tests in `backend/tests/` covering signup, duplicate email, login, wrong password, me endpoint, unauthenticated access
+
+## What's implemented (as of PL-8)
+
+- **AI Chat backend**: `POST /api/chat` (auth-protected) in `backend/routes/chat.py`; calls LiteLLM `acompletion` via OpenRouter (Cerebras, `openrouter/openai/gpt-oss-120b:free`) with a `ChatResponse` structured output containing `message` and `NdaFields`
+- **AI Chat frontend**: `frontend/src/components/ChatPanel.tsx` — bubble-layout chat UI with auto-scroll, loading state, and field merge logic; replaces the old `NdaForm` on the home page
+- **API client**: `ChatMessage`, `NdaFieldsResponse`, `ChatResponse` types and `api.chat()` method added to `frontend/src/lib/api.ts`
+- **Tests**: 4 backend unit tests in `backend/tests/test_chat.py` covering happy path, field extraction, unauthenticated access, and empty message list
 
 ## Color Scheme
 - Accent Yellow: `#ecad0a`
