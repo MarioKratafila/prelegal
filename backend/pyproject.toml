@@ -8,6 +8,7 @@ dependencies = [
     "aiosqlite>=0.22.1",
     "bcrypt<5",
     "fastapi>=0.136.3",
+    "litellm>=1.89.0",
     "passlib[bcrypt]>=1.7.4",
     "pydantic[email]>=2.13.4",
     "python-dotenv>=1.2.2",

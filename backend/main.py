@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from database import init_db
 from routes.auth import router as auth_router
+from routes.chat import router as chat_router
 
 load_dotenv()
 
@@ -19,6 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Prelegal API", lifespan=lifespan)
 app.include_router(auth_router)
+app.include_router(chat_router)
 
 # Serve Next.js static export - only mounted when frontend is built
 if os.path.isdir(STATIC_DIR):
