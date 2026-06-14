@@ -53,9 +53,8 @@ yarn-error.log*
 # Next.js build output
 next-env.d.ts
 
-# Package manager locks (keep one, ignore the rest)
-# Uncomment the one you're NOT using:
-# package-lock.json
+# Package manager locks
+package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
 
