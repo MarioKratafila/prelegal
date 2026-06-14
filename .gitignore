@@ -64,9 +64,6 @@ package-lock.json
 # TypeScript
 *.tsbuildinfo
 
-# Claude Code
-.claude/
-
 # Editor / IDE
 .vscode/
 .idea/
