@@ -27,6 +27,37 @@ export interface UserResponse {
   email: string;
 }
 
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+interface PartyFieldsPartial {
+  printName: string | null;
+  title: string | null;
+  company: string | null;
+  noticeAddress: string | null;
+}
+
+export interface NdaFieldsResponse {
+  purpose: string | null;
+  effectiveDate: string | null;
+  mndaTermType: "expires" | "until-terminated" | null;
+  mndaTermYears: number | null;
+  confidentialityTermType: "years" | "perpetuity" | null;
+  confidentialityTermYears: number | null;
+  governingLaw: string | null;
+  jurisdiction: string | null;
+  modifications: string | null;
+  party1: PartyFieldsPartial | null;
+  party2: PartyFieldsPartial | null;
+}
+
+export interface ChatResponse {
+  message: string;
+  fields: NdaFieldsResponse;
+}
+
 export const api = {
   signup: (email: string, password: string) =>
     request<TokenResponse>("/api/auth/signup", {
@@ -41,4 +72,10 @@ export const api = {
     }),
 
   me: () => request<UserResponse>("/api/auth/me"),
+
+  chat: (messages: ChatMessage[]) =>
+    request<ChatResponse>("/api/chat", {
+      method: "POST",
+      body: JSON.stringify({ messages }),
+    }),
 };

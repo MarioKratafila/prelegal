@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import NdaForm from "@/components/NdaForm";
+import ChatPanel from "@/components/ChatPanel";
 import NdaPreview from "@/components/NdaPreview";
 import { NdaFormData } from "@/lib/types";
 import { useAuth } from "@/context/AuthContext";
@@ -27,6 +27,10 @@ export default function Home() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [formData, setFormData] = useState<NdaFormData>(defaultFormData);
+
+  function updateFormData(updates: Partial<NdaFormData>) {
+    setFormData((prev) => ({ ...prev, ...updates }));
+  }
 
   useEffect(() => {
     if (!loading && !user) {
@@ -69,8 +73,8 @@ export default function Home() {
       </header>
 
       <div className="flex flex-1 overflow-hidden" style={{ height: "calc(100vh - 65px)" }}>
-        <aside className="w-96 border-r border-gray-200 bg-white overflow-y-auto flex-shrink-0">
-          <NdaForm data={formData} onChange={setFormData} />
+        <aside className="w-96 border-r border-gray-200 bg-white flex-shrink-0 flex flex-col">
+          <ChatPanel formData={formData} onUpdate={updateFormData} />
         </aside>
         <main className="flex-1 overflow-y-auto p-8 bg-gray-50">
           <NdaPreview data={formData} />
