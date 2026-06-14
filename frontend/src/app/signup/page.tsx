@@ -33,8 +33,12 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold" style={{ color: "#032147" }}>Prelegal</h1>
-          <p className="text-sm mt-1" style={{ color: "#888888" }}>Create your account</p>
+          <div className="inline-flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#209dd7" }} />
+            <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#209dd7" }}>Prelegal</span>
+          </div>
+          <h1 className="text-2xl font-bold" style={{ color: "#032147" }}>Get started</h1>
+          <p className="text-sm mt-1" style={{ color: "#888888" }}>Create your account to start drafting legal documents</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 space-y-5">
