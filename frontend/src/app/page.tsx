@@ -176,7 +176,7 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden" style={{ height: "calc(100vh - 65px)" }}>
+      <div className="flex flex-1 print-content-container" style={{ height: "calc(100vh - 65px)" }}>
         <DocumentHistory
           documents={documents}
           activeId={activeDocId}

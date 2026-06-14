@@ -22,7 +22,7 @@ function timeAgo(iso: string): string {
 
 export default function DocumentHistory({ documents, activeId, onSelect, onDelete, onNew }: Props) {
   return (
-    <div className="flex flex-col h-full bg-white border-r border-gray-200" style={{ width: "220px", flexShrink: 0 }}>
+    <div className="no-print flex flex-col h-full bg-white border-r border-gray-200" style={{ width: "220px", flexShrink: 0 }}>
       <div className="px-4 py-4 border-b border-gray-100">
         <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: "#888888" }}>
           History
